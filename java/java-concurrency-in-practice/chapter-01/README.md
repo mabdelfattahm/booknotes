@@ -51,7 +51,7 @@ Since multithreaded programs are so mainstream now, concurrency is not an advanc
 ### Safety hazards
 How your class will be executed in a multithreaded system is unpredictable & can lead to safety hazards.  
 Example - an `UnsafeSequence` class:
-```
+```java
 public class UnsafeSequence {
   private int value;
   
@@ -67,9 +67,12 @@ With unlucky timing, two threads executing `getNext()` at the same time might ge
 This is an example of a race condition - the program's behavior depends on how the runtime interleaves thread access.  
 
 Such shared memory access need to be synchronized & Java provides mechanisms to achieve that:
-```
+```java
+import net.jcip.annotations.GuardedBy;
+
 public class UnsafeSequence {
-  GuardedBy("this") private int value;
+  @GuardedBy("this")
+  private int value;
   
   public synchronized int getNext() {
     return value++;
